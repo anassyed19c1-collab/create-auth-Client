@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 
 export function proxy(request) {
-  const token = request.cookies.get("accessToken")?.value;
   const { pathname } = request.nextUrl;
 
   // Protected routes
@@ -10,12 +9,14 @@ export function proxy(request) {
   // Auth routes
   const authRoutes = ["/login", "/register"];
 
-  // Go to protected route without token
+  // Check token from cookies OR custom header
+  const token = request.cookies.get("accessToken")?.value || 
+                request.headers.get("x-access-token");
+
   if (protectedRoutes.includes(pathname) && !token) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Go to auth route with token
   if (authRoutes.includes(pathname) && token) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }

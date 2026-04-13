@@ -10,9 +10,9 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 
-export default function LoginPage() {
+export default function RegisterPage() {
     const router = useRouter();
-    const [formData, setFormData] = useState({ email: "", password: "" });
+    const [formData, setFormData] = useState({ name: "", email: "", password: "" });
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -21,21 +21,12 @@ export default function LoginPage() {
     };
 
     const handleSubmit = async (e) => {
-          console.log("Form submitted!"); // ← Ye add karo
-
         e.preventDefault();
-          console.log("After preventDefault"); // ← Ye add karo
-
         setLoading(true);
         setError("");
 
         try {
-                console.log("Trying API call..."); // ← Ye bhi add karo
-
-            const res = await api.post("/api/auth/login", formData);
-
-                console.log("Trying API call..."); // ← Ye bhi add karo
-
+            const res = await api.post("/api/auth/register", formData);
 
             if (res.data.success) {
                 setToken(res.data.data.accessToken);
@@ -55,7 +46,7 @@ export default function LoginPage() {
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
             <Card className="w-full max-w-md">
                 <CardHeader>
-                    <CardTitle className="text-2xl text-center">Login</CardTitle>
+                    <CardTitle className="text-2xl text-center">Register</CardTitle>
                 </CardHeader>
                 <CardContent>
                     {error && (
@@ -63,6 +54,19 @@ export default function LoginPage() {
                     )}
 
                     <form onSubmit={handleSubmit} className="space-y-4">
+                        <div className="space-y-1">
+                            <Label htmlFor="name">Name</Label>
+                            <Input
+                                id="name"
+                                type="text"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleChange}
+                                placeholder="Ali Ahmed"
+                                required
+                            />
+                        </div>
+
                         <div className="space-y-1">
                             <Label htmlFor="email">Email</Label>
                             <Input
@@ -89,15 +93,15 @@ export default function LoginPage() {
                             />
                         </div>
 
-                        <Button type="submit" className="w-full" disabled={loading}   onClick={() => console.log("Button clicked!")}>
-                            {loading ? "Logging in..." : "Login"}
+                        <Button type="submit" className="w-full" disabled={loading}>
+                            {loading ? "Creating account..." : "Register"}
                         </Button>
                     </form>
 
                     <p className="text-center text-sm mt-4">
-                        Don't have an account?{" "}
-                        <Link href="/register" className="text-blue-500 hover:underline">
-                            Register
+                        Already have an account?{" "}
+                        <Link href="/login" className="text-blue-500 hover:underline">
+                            Login
                         </Link>
 
                     </p>

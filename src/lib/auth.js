@@ -1,6 +1,10 @@
+import Cookies from "js-cookie";
+
+
 // Save Token
 export const setToken = (token) => {
   localStorage.setItem("accessToken", token);
+  Cookies.set("accessToken", token);
 };
 
 // Get Token
@@ -11,6 +15,7 @@ export const getToken = () => {
 // Remove Token
 export const removeToken = () => {
   localStorage.removeItem("accessToken");
+  Cookies.remove("accessToken");
 };
 
 // Save User
